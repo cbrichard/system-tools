@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check to see if packer is installed
+if [ ! -x /usr/local/bin/packer ]; then
+   echo "Either packer is not installed or you do not have packer executable in your binary search path, please install packer and add to search path"
+else
+    echo "All Set, packer is installed, lets continue"
+fi
+
+CONFIG_FILE=$1
+
+export ID=$AWS_ACCESS_KEY_ID
+export KEY=$AWS_SECRET_ACCESS_KEY
+export OWNER=$AWS_OWNER_ID
+
+
+cd $PWD
+if [ -f $PWD/$CONFIG_FILE ]; then
+    packer build -var "owner_id=$OWNER" -var "aws_access_key=$ID" -var "aws_secret_key=$KEY" $CONFIG_FILE
+else
+    echo "The config file specified does not exist in the current working directory"
+fi
